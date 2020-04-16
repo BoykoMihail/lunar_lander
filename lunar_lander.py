@@ -78,7 +78,8 @@ class Deep_Q_Learning_Model:
             max_steps = 1000
             for i in range(max_steps):
                 action = self.getAction(state)
-                lunar.render()
+                if e%20 == 0:
+                    lunar.render()
                 next_state, reward, done, _ = lunar.step(action)
                 score += reward
                 next_state = np.reshape(next_state, (1, 8))
