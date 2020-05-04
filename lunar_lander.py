@@ -71,6 +71,10 @@ class Deep_Q_Learning_Model:
             return np.argmax(act_values[0])
             
     def tarain(self, lunar, episodes):
+        array200plus = 0
+        array100plus = 0
+        array0plus = 0
+        array0minus = 0
         for e in range(episodes):
             state = lunar.reset()
             state = np.reshape(state, (1, 8))
@@ -78,7 +82,7 @@ class Deep_Q_Learning_Model:
             max_steps = 1000
             for i in range(max_steps):
                 action = self.getAction(state)
-                if e%20 == 0:
+                if e > 1070 :
                     lunar.render()
                 next_state, reward, done, _ = lunar.step(action)
                 score += reward
@@ -89,12 +93,29 @@ class Deep_Q_Learning_Model:
                 if done:
                     print("episode: {} from {}, score: {}".format(e, episodes, score))
                     break
+            if e > 1000:
+                if score > 200:
+                    array200plus += 1
+                elif score > 100:
+                    array100plus += 1
+                elif score > 0:
+                    array0plus += 1
+                else:
+                    array0minus += 1
+#                srorreArray.append(score)
+#                print("Average = ", np.mean(srorreArray))
+        return array200plus, array100plus, array0plus, array0minus
 
 
 if __name__ == '__main__':
 
-    episodes = 1000
+    episodes = 1100
     agent = Deep_Q_Learning_Model(env.action_space.n, env.observation_space.shape[0])
-    agent.tarain(env, episodes)
+
+    array200plus, array100plus, array0plus, array0minus = agent.tarain(env, episodes)
+    print("count of 200+ = ",array200plus)
+    print("count of 100+ = ",array100plus)
+    print("count of 0+ = ",array0plus)
+    print("count of 0- = ",array0minus)
     print("Train is over!")
     
